@@ -2,15 +2,20 @@ package org.usfirst.frc.team5426.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.Scheduler;
 
 public class Robot extends IterativeRobot {
 	
 	public static OI controls;
 	
+	public static Preferences settings;
+	
 	// INITIALIZATION METHODS
 	@Override
 	public void robotInit() {
+		settings = Preferences.getInstance();
+		
 		controls = new OI();
 		controls.registerControls();
 	}
