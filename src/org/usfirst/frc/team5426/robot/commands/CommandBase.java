@@ -32,6 +32,6 @@ public abstract class CommandBase extends Command {
 			driveTrain.getRearLeft(), 
 			driveTrain.getFrontRight(), 
 			driveTrain.getRearRight()
-		);	
+		);
 	}
 }

@@ -35,8 +35,9 @@ public class RobotMap {
 			System.out.println("SOLENOID_GRABBER_BACKWARD NOT SET. GRABBER WILL NOT FUNCTION PROPERLY");
 		}
 		
-		if (!Robot.settings.containsKey("SOLENOID_LOCK")) {
-			System.out.println("SOLENOID_LOCK NOT SET. BOOM LOCK WILL NOT FUNCTION PROPERLY");
+		// Controls verification
+		if (!Robot.settings.containsKey("TRIGGER_DEADZONE")) {
+			System.out.println("TRIGGER_DEADZONE NOT SET. DEADZONE WILL BE NON-EXISTENT");
 		}
 	}
 }
