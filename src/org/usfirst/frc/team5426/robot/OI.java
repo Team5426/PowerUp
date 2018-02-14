@@ -1,5 +1,6 @@
 package org.usfirst.frc.team5426.robot;
 
+import org.usfirst.frc.team5426.robot.commands.CommandGrabber;
 import org.usfirst.frc.team5426.robot.commands.CommandWinch;
 
 import enums.Direction;
@@ -16,6 +17,7 @@ public class OI {
 	public void registerControls() {
 		
 		controller.button_A.whileHeld(new CommandWinch(Direction.FORWARD, 1));
+		controller.button_X.whenPressed(new CommandGrabber());
 		
 		Robot.log("Controls successfully registered");
 	}

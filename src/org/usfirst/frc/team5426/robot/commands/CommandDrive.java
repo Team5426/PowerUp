@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.Timer;
 public class CommandDrive extends CommandBase {
 	
 	public CommandDrive() {
-		
 		requires(driveTrain);
 	}
 	

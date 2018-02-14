@@ -20,10 +20,10 @@ public class DriveTrain extends Subsystem {
 	
 	public DriveTrain() {
 		
-		FRONT_LEFT  = new WPI_TalonSRX(Robot.settings.getInt("TALON_FRONT_LEFT", 	0));
-		FRONT_RIGHT = new WPI_TalonSRX(Robot.settings.getInt("TALON_FRONT_RIGHT",	0));
-		REAR_LEFT   = new WPI_TalonSRX(Robot.settings.getInt("TALON_REAR_LEFT", 	0));
-		REAR_RIGHT  = new WPI_TalonSRX(Robot.settings.getInt("TALON_REAR_RIGHT", 	0));
+		FRONT_LEFT  = new WPI_TalonSRX(Robot.settings.getInt("TALON_FRONT_LEFT", 	-1));
+		FRONT_RIGHT = new WPI_TalonSRX(Robot.settings.getInt("TALON_FRONT_RIGHT",	-1));
+		REAR_LEFT   = new WPI_TalonSRX(Robot.settings.getInt("TALON_REAR_LEFT", 	-1));
+		REAR_RIGHT  = new WPI_TalonSRX(Robot.settings.getInt("TALON_REAR_RIGHT", 	-1));
 		
 		robotDrive = new MecanumDrive(FRONT_LEFT, REAR_LEFT, FRONT_RIGHT, REAR_RIGHT);
 	}

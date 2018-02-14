@@ -1,5 +1,5 @@
 package enums;
 
 public enum Direction {
-	FORWARD, BACKWARD;
+	FORWARD, BACKWARD, LEFT, RIGHT, UP, DOWN;
 }

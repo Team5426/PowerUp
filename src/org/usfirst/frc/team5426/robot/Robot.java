@@ -18,6 +18,8 @@ public class Robot extends IterativeRobot {
 		
 		controls = new OI();
 		controls.registerControls();
+		
+		if (!settings.containsKey("TALON_FRONT_LEFT")) System.out.println("FRONT-LEFT TALON ID NOT SET");
 	}
 	
 	@Override

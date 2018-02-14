@@ -1,7 +1,6 @@
 package org.usfirst.frc.team5426.robot.subsystems;
 
 import org.usfirst.frc.team5426.robot.Robot;
-
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -20,7 +19,7 @@ public class Winch extends Subsystem {
 		TOP = new WPI_TalonSRX(Robot.settings.getInt("TALON_WINCH_TOP", 0));
 		BOTTOM = new WPI_TalonSRX(Robot.settings.getInt("TALON_WINCH_BOTTOM", 0));
 		
-		motors = new SpeedControllerGroup(TOP, BOTTOM);
+		motors = new SpeedControllerGroup(TOP, BOTTOM);	
 	}
 	
 	public void start(double power) {
@@ -33,7 +32,6 @@ public class Winch extends Subsystem {
 
 	@Override
 	protected void initDefaultCommand() {
-		// TODO Auto-generated method stub
 		
 	}
 	
