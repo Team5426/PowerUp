@@ -4,6 +4,8 @@ import org.usfirst.frc.team5426.robot.Robot;
 
 public class CommandElevator extends CommandBase {
 	
+	private double speed = 0.5;
+	
 	public CommandElevator() {
 		requires(elevator);
 	}
@@ -17,10 +19,10 @@ public class CommandElevator extends CommandBase {
 		boolean leftBumperState  = Robot.controls.getController().bumper_left.get();
 		boolean rightBumperState = Robot.controls.getController().bumper_left.get();
 		
-		if (leftBumperState && rightBumperState) elevator.adjust(0.0);
-		else if (leftBumperState) elevator.adjust(-1.0);
-		else if (rightBumperState) elevator.adjust(1.0);
-		else elevator.adjust(0.0);
+		if (leftBumperState && rightBumperState) elevator.stop();
+		else if (leftBumperState) elevator.adjust(-speed);
+		else if (rightBumperState) elevator.adjust(speed);
+		else elevator.stop();
 	}
 	
 	protected void interrupted() {

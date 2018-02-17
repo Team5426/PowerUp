@@ -1,11 +1,9 @@
 package org.usfirst.frc.team5426.robot.subsystems;
 
-import org.usfirst.frc.team5426.robot.Robot;
 import org.usfirst.frc.team5426.robot.commands.CommandDrive;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 
@@ -20,10 +18,10 @@ public class DriveTrain extends Subsystem {
 	
 	public DriveTrain() {
 		
-		FRONT_LEFT  = new WPI_TalonSRX(Robot.settings.getInt("TALON_FRONT_LEFT", 	-1));
-		FRONT_RIGHT = new WPI_TalonSRX(Robot.settings.getInt("TALON_FRONT_RIGHT",	-1));
-		REAR_LEFT   = new WPI_TalonSRX(Robot.settings.getInt("TALON_REAR_LEFT", 	-1));
-		REAR_RIGHT  = new WPI_TalonSRX(Robot.settings.getInt("TALON_REAR_RIGHT", 	-1));
+		FRONT_LEFT  = new WPI_TalonSRX(1);
+		FRONT_RIGHT = new WPI_TalonSRX(2);
+		REAR_LEFT   = new WPI_TalonSRX(3);
+		REAR_RIGHT  = new WPI_TalonSRX(4);
 		
 		robotDrive = new MecanumDrive(FRONT_LEFT, REAR_LEFT, FRONT_RIGHT, REAR_RIGHT);
 	}
