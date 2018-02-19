@@ -1,28 +1,34 @@
 package org.usfirst.frc.team5426.robot.subsystems;
 
-import org.usfirst.frc.team5426.robot.Robot;
 import org.usfirst.frc.team5426.robot.commands.CommandElevator;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Elevator extends Subsystem {
 	
 	private WPI_TalonSRX motor;
 	
-	public DigitalInput limiter;
+	public DigitalInput limiterTop;
+	public DigitalInput limiterBottom;
 	
 	//public Position position;
 	
 	public Elevator() {
-		motor = new WPI_TalonSRX(Robot.settings.getInt("TALON_ELEVATOR", -1));
+		motor = new WPI_TalonSRX(7);
 		
-		limiter = new DigitalInput(0);
+		limiterTop = new DigitalInput(0);
+		limiterBottom = new DigitalInput(1);
+		
+		SmartDashboard.putData(limiterTop);
+		SmartDashboard.putData(limiterBottom);
 	}
 	
 	public void stop() {
+		
 		motor.set(0.0);
 	}
 	

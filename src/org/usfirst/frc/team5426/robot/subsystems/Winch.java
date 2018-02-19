@@ -16,14 +16,15 @@ public class Winch extends Subsystem {
 	
 	public Winch() {
 		
-		TOP = new WPI_TalonSRX(Robot.settings.getInt("TALON_WINCH_TOP", 0));
-		BOTTOM = new WPI_TalonSRX(Robot.settings.getInt("TALON_WINCH_BOTTOM", 0));
+		TOP = new WPI_TalonSRX(5);
+		BOTTOM = new WPI_TalonSRX(6);
 		
 		motors = new SpeedControllerGroup(TOP, BOTTOM);	
 	}
 	
 	public void start(double power) {
-		motors.set(power);
+		TOP.set(1);
+		BOTTOM.set(-1);
 	}
 	
 	public void stop() {

@@ -4,38 +4,33 @@ import org.usfirst.frc.team5426.robot.subsystems.Boom;
 import org.usfirst.frc.team5426.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team5426.robot.subsystems.Elevator;
 import org.usfirst.frc.team5426.robot.subsystems.Grabber;
-import org.usfirst.frc.team5426.robot.subsystems.Pneumatics;
+import org.usfirst.frc.team5426.robot.subsystems.Harpoon;
 import org.usfirst.frc.team5426.robot.subsystems.Winch;
+import org.usfirst.frc.team5426.robot.subsystems.Wings;
 
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 
 public abstract class CommandBase extends Command {
 	
-	protected static DriveTrain driveTrain;
-	protected static Winch winch;
-	protected static Grabber grabber;
-	protected static Elevator elevator;
-	protected static Boom boom;
-	protected static Pneumatics pneumatics;
+	public static DriveTrain driveTrain;
+	public static Winch winch;
+	public static Grabber grabber;
+	public static Elevator elevator;
+	public static Boom boom;
+	public static Wings wings;
+	public static Harpoon harpoon;
+	//public static Pneumatics pneumatics;
 	
-	protected static MecanumDrive drive;
+	public static MecanumDrive drive;
 	
-	public CommandBase() {
-		
+	public static void init() {
 		driveTrain = new DriveTrain();
-		winch = new Winch();
 		grabber = new Grabber();
 		elevator = new Elevator();
+		winch = new Winch();
 		boom = new Boom();
-		pneumatics = new Pneumatics();
-		
-		drive = new MecanumDrive(
-			driveTrain.getFrontLeft(),
-			driveTrain.getRearLeft(), 
-			driveTrain.getFrontRight(), 
-			driveTrain.getRearRight()
-		);
+		wings = new Wings();
+		harpoon = new Harpoon();
 	}
 }

@@ -1,34 +1,39 @@
 package org.usfirst.frc.team5426.robot.subsystems;
 
-import org.usfirst.frc.team5426.robot.Robot;
-
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Grabber extends Subsystem {
 	
+	private DoubleSolenoid solenoid;
+	
 	private Solenoid forward;
 	private Solenoid backward;
 	
 	public Grabber() {
-		forward 	= new Solenoid(Robot.settings.getInt("SOLENOID_GRABBER_FORWARD", -1));
-		backward = new Solenoid(Robot.settings.getInt("SOLENOID_GRABBER_BACKWARD", -1));
+		solenoid = new DoubleSolenoid(0, 1);
+		
+		//forward  = new Solenoid(0);
+		//backward = new Solenoid(1);
 	}
 	
 	public void grab() {
-		backward.set(false);
-		forward.set(true);
+		//backward.set(false);
+		//forward.set(true);
 		
-		System.out.println("[INFO] Grabber now grabbing");
+		solenoid.set(DoubleSolenoid.Value.kForward);
 	}
 	
 	public void release() {
-		forward.set(false);
-		backward.set(true);
+		//forward.set(false);
+		//backward.set(true);
 		
-		System.out.println("[INFO] Grabber now releasing");
+		solenoid.set(DoubleSolenoid.Value.kReverse);
+	}
+	
+	public DoubleSolenoid getSolenoid() {
+		return solenoid;
 	}
 	
 	public boolean isGrabbing() {

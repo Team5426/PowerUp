@@ -7,27 +7,28 @@ import edu.wpi.first.wpilibj.Timer;
 public class CommandDrive extends CommandBase {
 	
 	public CommandDrive() {
-		requires(driveTrain);
+		requires(CommandBase.driveTrain);
 	}
 	
-	@Override
-	public void initialize() {
+	protected void initialize() {
 		
 	}
-	
-	@Override
-	public void execute() {
+
+	protected void execute() {
 		
-		drive.driveCartesian(
-			Robot.controls.getYAxis(),
-			Robot.controls.getXAxis(),
-			Robot.controls.getTwist()
-		);
+		driveTrain.drive(Robot.controls.getXAxis(), Robot.controls.getYAxis());
 		
 		Timer.delay(0.005);
 	}
+	
+	protected void interupted() {
+		
+	}
+	
+	protected void end() {
+		
+	}
 
-	@Override
 	protected boolean isFinished() {
 		return false;
 	}

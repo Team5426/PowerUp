@@ -4,7 +4,7 @@ public class RobotMap {
 	
 	public static void verifyKeys() {
 		
-		// Talon verification
+		/*// Talon verification
 		if (!Robot.settings.containsKey("TALON_FRONT_LEFT")) {
 			System.out.println("TALON_FRONT_LEFT NOT SET. DRIVETRAIN WILL NOT FUNCTION PROPERLY");
 		}
@@ -38,6 +38,6 @@ public class RobotMap {
 		// Controls verification
 		if (!Robot.settings.containsKey("TRIGGER_DEADZONE")) {
 			System.out.println("TRIGGER_DEADZONE NOT SET. DEADZONE WILL BE NON-EXISTENT");
-		}
+		}*/
 	}
 }

@@ -17,7 +17,7 @@ public class CommandElevator extends CommandBase {
 	protected void execute() {
 		
 		boolean leftBumperState  = Robot.controls.getController().bumper_left.get();
-		boolean rightBumperState = Robot.controls.getController().bumper_left.get();
+		boolean rightBumperState = Robot.controls.getController().bumper_right.get();
 		
 		if (leftBumperState && rightBumperState) elevator.stop();
 		else if (leftBumperState) elevator.adjust(-speed);

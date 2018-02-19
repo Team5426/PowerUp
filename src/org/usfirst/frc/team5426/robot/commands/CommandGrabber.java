@@ -1,9 +1,11 @@
 package org.usfirst.frc.team5426.robot.commands;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+
 public class CommandGrabber extends CommandBase {
 	
 	public CommandGrabber() {
-		requires(grabber);
+		requires(CommandBase.grabber);
 	}
 	
 	protected void initialize() {
@@ -12,8 +14,14 @@ public class CommandGrabber extends CommandBase {
 	
 	protected void execute() {
 		
-		if (grabber.isReleased()) grabber.grab();
-		else if (grabber.isGrabbing()) grabber.release();
+		DoubleSolenoid.Value value = grabber.getSolenoid().get();
+		
+		if (value == DoubleSolenoid.Value.kForward) grabber.release();
+		else if (value == DoubleSolenoid.Value.kReverse) grabber.grab();
+		else if (value == DoubleSolenoid.Value.kOff) grabber.grab();
+		
+		//if (grabber.isReleased()) grabber.grab();
+		//else if (grabber.isGrabbing()) grabber.release();
 	}
 	
 	protected void interrupted() {

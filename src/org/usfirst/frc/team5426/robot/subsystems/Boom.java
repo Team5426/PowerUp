@@ -12,19 +12,17 @@ public class Boom extends Subsystem {
 	
 	private WPI_TalonSRX motor;
 	
-	private DigitalInput limiter;
+	public DigitalInput limiterTop;
+	public DigitalInput limiterBottom;
 	
 	public Boom() {
-		motor = new WPI_TalonSRX(Robot.settings.getInt("TALON_BOOM", -1));
+		motor = new WPI_TalonSRX(8);
 		
-		limiter = new DigitalInput(1);
+		limiterTop = new DigitalInput(2);
+		limiterBottom = new DigitalInput(3);
 	}
 	
 	public void adjust(double speed) {
-		if (limiter.get()) {
-			stop();
-			return;
-		}
 		
 		motor.set(speed);
 	}

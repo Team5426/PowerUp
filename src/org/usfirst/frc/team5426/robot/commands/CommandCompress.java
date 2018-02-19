@@ -2,7 +2,7 @@ package org.usfirst.frc.team5426.robot.commands;
 
 public class CommandCompress extends CommandBase {
 	
-	public CommandCompress() {
+	/*public CommandCompress() {
 		requires(pneumatics);
 	}
 	
@@ -20,10 +20,9 @@ public class CommandCompress extends CommandBase {
 	
 	protected void interrupted() {
 		
-	}
+	}*/
 	
 	protected boolean isFinished() {
-		
-		return pneumatics.getSwitchStatus();
+		return true;//pneumatics.getSwitchStatus();
 	}
 }
