@@ -18,7 +18,7 @@ public class Elevator extends Subsystem {
 	//public Position position;
 	
 	public Elevator() {
-		motor = new WPI_TalonSRX(7);
+		motor = new WPI_TalonSRX(5);
 		
 		limiterTop = new DigitalInput(0);
 		limiterBottom = new DigitalInput(1);
@@ -32,7 +32,7 @@ public class Elevator extends Subsystem {
 		motor.set(0.0);
 	}
 	
-	public void adjust(double speed) {
+	public void set(double speed) {
 		motor.set(speed);
 	}
 	
@@ -54,6 +54,6 @@ public class Elevator extends Subsystem {
 
 	@Override
 	protected void initDefaultCommand() {
-		this.setDefaultCommand(new CommandElevator());
+		//this.setDefaultCommand(new CommandElevator());
 	}
 }

@@ -1,7 +1,12 @@
 package org.usfirst.frc.team5426.robot;
 
-import org.usfirst.frc.team5426.robot.auto.DriveStraight;
+import org.usfirst.frc.team5426.robot.auto.CrossLine;
+import org.usfirst.frc.team5426.robot.auto.DropLeft;
+import org.usfirst.frc.team5426.robot.auto.DropRight;
+import org.usfirst.frc.team5426.robot.auto.StraightDrop;
 import org.usfirst.frc.team5426.robot.commands.CommandBase;
+import org.usfirst.frc.team5426.robot.commands.CommandDrive;
+import org.usfirst.frc.team5426.robot.commands.CommandElevator;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -21,8 +26,8 @@ public class Robot extends IterativeRobot {
 	
 	public static Preferences settings;
 	
-	public static String gameData;
-	public static Alliance alliance;
+	public static String gameData = null;
+	public static Alliance alliance = null;
 	
 	private SendableChooser<CommandGroup> auto;
 	private Command autoCommand;
@@ -38,20 +43,22 @@ public class Robot extends IterativeRobot {
 		controls = new OI();
 		controls.registerControls();
 		
-		gameData = DriverStation.getInstance().getGameSpecificMessage();
-		alliance = DriverStation.getInstance().getAlliance();
-		
 		auto = new SendableChooser<>();
 		auto.addDefault("None", null);
-		auto.addObject("Straight", new DriveStraight());
+		auto.addObject("Cross Line", new CrossLine());
+		auto.addObject("Straight Drop", new StraightDrop());
+		auto.addObject("Drop Left", new DropLeft());
+		auto.addObject("Drop Right", new DropRight());
 		SmartDashboard.putData("Autonomous Mode: ", auto);
 		
-		if (gameData.length() > 0) {
+		
+		
+		/*if (gameData.length() > 0) {
 			
 			if (alliance == Alliance.Red) {
 				switch (gameData.charAt(0)) {
 				case 'L':
-					// red left
+					//autoCommand = new DropLeft();
 					break;
 				case 'R':
 					// red right
@@ -78,7 +85,7 @@ public class Robot extends IterativeRobot {
 				// right auto code
 				break;
 			}
-		}
+		}*/
 		
 		
 		
@@ -87,6 +94,15 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void autonomousInit() {
+		
+		System.out.println("autonomousInit()");
+
+		while (gameData == null) {
+			gameData = DriverStation.getInstance().getGameSpecificMessage();
+		}
+		
+		if (gameData != null) System.out.println(gameData);
+		
 		autoCommand = auto.getSelected();
 		if (autoCommand != null) autoCommand.start();
 	}
@@ -94,6 +110,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopInit() {
 		
+		CommandBase.elevator.setDefaultCommand(new CommandElevator());
+		CommandBase.driveTrain.setDefaultCommand(new CommandDrive());
 	}
 	
 	@Override

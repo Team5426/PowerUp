@@ -18,13 +18,9 @@ import edu.wpi.first.wpilibj.hal.FRCNetComm.tResourceType;
 
 public class DriveTrain extends Subsystem {
 	
-	private WPI_TalonSRX FRONT_LEFT;
-	private WPI_TalonSRX FRONT_RIGHT;
-	private WPI_TalonSRX REAR_LEFT;
-	private WPI_TalonSRX REAR_RIGHT;
-	
-	private SpeedControllerGroup LEFT_MOTORS;
-	private SpeedControllerGroup RIGHT_MOTORS;
+	private WPI_TalonSRX LEFT;
+	private WPI_TalonSRX RIGHT;
+
 	private SpeedControllerGroup MOTORS;
 	
 	public ADXRS450_Gyro gyro;
@@ -33,31 +29,21 @@ public class DriveTrain extends Subsystem {
 	
 	public DriveTrain() {
 		
-		FRONT_LEFT  = new WPI_TalonSRX(1);
-		FRONT_RIGHT = new WPI_TalonSRX(2);
-		REAR_LEFT   = new WPI_TalonSRX(3);
-		REAR_RIGHT  = new WPI_TalonSRX(4);
+		LEFT   = new WPI_TalonSRX(1);
+		RIGHT  = new WPI_TalonSRX(2);
 		
-		LEFT_MOTORS = new SpeedControllerGroup(FRONT_LEFT, REAR_LEFT);
-		RIGHT_MOTORS = new SpeedControllerGroup(FRONT_RIGHT, REAR_RIGHT);
-		MOTORS = new SpeedControllerGroup(FRONT_LEFT, REAR_LEFT, FRONT_RIGHT, REAR_RIGHT);
+		MOTORS = new SpeedControllerGroup(LEFT, RIGHT);
 		
 		gyro = new ADXRS450_Gyro(Port.kOnboardCS0);
 		gyro.calibrate();
 		
-		drive = new DifferentialDrive(LEFT_MOTORS, RIGHT_MOTORS);
+		drive = new DifferentialDrive(LEFT, RIGHT);
+		//drive.setSafetyEnabled(false);
 	}
 	
 	public void drive(double speed, double twist) {
 		
-		drive.arcadeDrive(speed, twist);
-		
-		SmartDashboard.putNumber("FRONT_LEFT", FRONT_LEFT.get());
-		SmartDashboard.putNumber("FRONT_RIGHT", FRONT_RIGHT.get());
-		SmartDashboard.putNumber("REAR_LEFT", REAR_LEFT.get());
-		SmartDashboard.putNumber("REAR_RIGHT", REAR_RIGHT.get());
-		
-		drive.arcadeDrive(speed, twist);
+		drive.arcadeDrive(-twist, speed);
 	}
 	
 	public void stop() {
@@ -65,23 +51,15 @@ public class DriveTrain extends Subsystem {
 	}
 	
 	public void initDefaultCommand() {
-		this.setDefaultCommand(new CommandDrive());
+		//this.setDefaultCommand(new CommandDrive());
 	}
 	
-	public WPI_TalonSRX getFrontLeft() {
-		return FRONT_LEFT;
+	public WPI_TalonSRX getLeft() {
+		return LEFT;
 	}
 	
-	public WPI_TalonSRX getFrontRight() {
-		return FRONT_RIGHT;
-	}
-	
-	public WPI_TalonSRX getRearLeft() {
-		return REAR_LEFT;
-	}
-	
-	public WPI_TalonSRX getRearRight() {
-		return REAR_RIGHT;
+	public WPI_TalonSRX getRight() {
+		return RIGHT;
 	}
 
 }

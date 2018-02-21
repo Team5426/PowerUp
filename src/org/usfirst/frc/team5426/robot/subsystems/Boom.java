@@ -16,7 +16,7 @@ public class Boom extends Subsystem {
 	public DigitalInput limiterBottom;
 	
 	public Boom() {
-		motor = new WPI_TalonSRX(8);
+		motor = new WPI_TalonSRX(6);
 		
 		limiterTop = new DigitalInput(2);
 		limiterBottom = new DigitalInput(3);

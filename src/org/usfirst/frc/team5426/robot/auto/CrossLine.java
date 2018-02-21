@@ -5,13 +5,13 @@ import org.usfirst.frc.team5426.robot.commands.auto.AutonomousRotateToAngle;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class DriveStraight extends CommandGroup {
+public class CrossLine extends CommandGroup {
 	
-	public DriveStraight() {
+	public CrossLine() {
 		
-		this.addSequential(new AutonomousRotateToAngle(90));
+		//this.addSequential(new AutonomousRotateToAngle(90));
 		
-		//this.addSequential(new AutonomousDrive(0.5, 0.0, 3));
+		this.addSequential(new AutonomousDrive(0.5, 0.0, 3));
 		//this.addSequential(new AutonomousDrive(0.0, 0.5, 3));
 		
 		//this.addSequential(new AutonomousDrive(0.5, 0.0, 2));

@@ -16,8 +16,8 @@ public class Winch extends Subsystem {
 	
 	public Winch() {
 		
-		TOP = new WPI_TalonSRX(5);
-		BOTTOM = new WPI_TalonSRX(6);
+		TOP = new WPI_TalonSRX(3);
+		BOTTOM = new WPI_TalonSRX(4);
 		
 		motors = new SpeedControllerGroup(TOP, BOTTOM);	
 	}
