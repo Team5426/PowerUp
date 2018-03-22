@@ -1,5 +1,6 @@
 package org.usfirst.frc.team5426.robot.auto;
 
+import org.usfirst.frc.team5426.robot.Robot;
 import org.usfirst.frc.team5426.robot.commands.auto.AutonomousDrive;
 import org.usfirst.frc.team5426.robot.commands.auto.AutonomousDrop;
 import org.usfirst.frc.team5426.robot.commands.auto.AutonomousGrab;
@@ -11,6 +12,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class DropLeft extends CommandGroup {
 	
 	public DropLeft() {
+		this.addSequential(new AutonomousPause(Robot.AUTO_DELAY));
 		
 		this.addSequential(new AutonomousGrab());
 		this.addSequential(new AutonomousRaiseElevator(1.0, 0.8));

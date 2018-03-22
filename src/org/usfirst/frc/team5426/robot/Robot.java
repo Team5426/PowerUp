@@ -20,6 +20,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
 	
+	public static double AUTO_DELAY = 0;
+	
 	public static OI controls;
 	
 	public static CommandBase commandBase;
@@ -31,6 +33,8 @@ public class Robot extends IterativeRobot {
 	
 	private SendableChooser<CommandGroup> auto;
 	private Command autoCommand;
+	
+	private SendableChooser<Boolean> delay;
 	
 	// INITIALIZATION METHODS
 	@Override
@@ -49,9 +53,21 @@ public class Robot extends IterativeRobot {
 		auto.addObject("Straight Drop", new StraightDrop());
 		auto.addObject("Drop Left", new DropLeft());
 		auto.addObject("Drop Right", new DropRight());
-		SmartDashboard.putData("Autonomous Mode: ", auto);
+		SmartDashboard.putData("Autonomous Mode:", auto);
 		
-		
+		delay = new SendableChooser<>();
+		delay.addDefault("0 seconds", setAutoDelay(0));
+		delay.addDefault("1 seconds", setAutoDelay(1));
+		delay.addDefault("2 seconds", setAutoDelay(2));
+		delay.addDefault("3 seconds", setAutoDelay(3));
+		delay.addDefault("4 seconds", setAutoDelay(4));
+		delay.addDefault("5 seconds", setAutoDelay(5));
+		delay.addDefault("6 seconds", setAutoDelay(6));
+		delay.addDefault("7 seconds", setAutoDelay(7));
+		delay.addDefault("8 seconds", setAutoDelay(8));
+		delay.addDefault("9 seconds", setAutoDelay(9));
+		delay.addDefault("10 seconds", setAutoDelay(10));
+		SmartDashboard.putData("Autonomous Delay:", delay);
 		
 		/*if (gameData.length() > 0) {
 			
@@ -74,37 +90,36 @@ public class Robot extends IterativeRobot {
 					// blue right
 				}
 			}
-		}
-		
-		if (gameData.length() > 0) {
-			switch (gameData.charAt(0)) {
-			case 'L':
-				// left auto code
-				break;
-			case 'R':
-				// right auto code
-				break;
-			}
 		}*/
-		
-		
-		
-		//if (!settings.containsKey("TALON_FRONT_LEFT")) System.out.println("FRONT-LEFT TALON ID NOT SET");
 	}
 	
 	@Override
 	public void autonomousInit() {
-		
-		System.out.println("autonomousInit()");
-
-		while (gameData == null) {
-			gameData = DriverStation.getInstance().getGameSpecificMessage();
+		if (gameData.length() > 0) {
+			
+			char firstChar = gameData.charAt(0);
+			if (alliance == Alliance.Red) {
+				switch (firstChar) {
+				case 'L':
+					// left side auto
+					break;
+				case 'R':
+					// right side auto
+					break;
+				}
+			}
+			
+			else if (alliance == Alliance.Blue) {
+				switch (firstChar) {
+				case 'L':
+					// left side auto
+					break;
+				case 'R':
+					// right side auto
+					break;
+				}
+			}
 		}
-		
-		if (gameData != null) System.out.println(gameData);
-		
-		autoCommand = auto.getSelected();
-		if (autoCommand != null) autoCommand.start();
 	}
 	
 	@Override
@@ -123,17 +138,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotPeriodic() {
 		
-		//System.out.println("Gyro Angle: " + CommandBase.driveTrain.gyro.getAngle());
-		//System.out.println("Elevator Top Limitter: " + CommandBase.elevator.limiterTop.get());
-		//System.out.println("Elevator Bottom Limitter: " + CommandBase.elevator.limiterTop.get());
-		//System.out.println("Boom Top Limitter: " + CommandBase.boom.limiterTop.get());
-		//System.out.println("Boom Bottom Limitter: " + CommandBase.boom.limiterBottom.get());
-		
-		//if (CommandBase.boom.limiterBottom.get()) System.out.println("Boom Bottom Limiter is Active");
-		//if (CommandBase.boom.limiterTop.get()) System.out.println("Boom Top Limiter is active");
-		
-		//if (CommandBase.elevator.limiterBottom.get()) System.out.println("Elevator Top Limiter is Active");
-		//if (CommandBase.elevator.limiterTop.get()) System.out.println("Elevator Bottom Limiter is active");
 	}
 	
 	@Override
@@ -150,7 +154,7 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void disabledPeriodic() {
-		
+		gameData = DriverStation.getInstance().getGameSpecificMessage();
 	}
 	
 	// LOGGING METHODS
@@ -167,6 +171,12 @@ public class Robot extends IterativeRobot {
 	public static void error(String message) {
 		
 		DriverStation.reportWarning("[ERROR] " + message, false);
+	}
+	
+	public boolean setAutoDelay(double delay) {
+		this.AUTO_DELAY = delay;
+		
+		return true;
 	}
 	
 	

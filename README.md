@@ -6,3 +6,4 @@ This repository contains all of the code for Team 5426's 2018 robot.
 
 | KEY | REQUIRED | VALUE | DESCRIPTION |
 | --- | --- | --- | --- |
+| AUTO_DELAY | true | Double | Delay in the autonomous set by the dashboard |

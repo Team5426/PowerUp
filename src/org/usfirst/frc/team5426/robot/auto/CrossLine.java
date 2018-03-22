@@ -1,13 +1,15 @@
 package org.usfirst.frc.team5426.robot.auto;
 
+import org.usfirst.frc.team5426.robot.Robot;
 import org.usfirst.frc.team5426.robot.commands.auto.AutonomousDrive;
-import org.usfirst.frc.team5426.robot.commands.auto.AutonomousRotateToAngle;
+import org.usfirst.frc.team5426.robot.commands.auto.AutonomousPause;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public class CrossLine extends CommandGroup {
 	
 	public CrossLine() {
+		this.addSequential(new AutonomousPause(Robot.AUTO_DELAY));
 		
 		//this.addSequential(new AutonomousRotateToAngle(90));
 		
