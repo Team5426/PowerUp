@@ -33,7 +33,7 @@ public class Boom extends Subsystem {
 
 	@Override
 	protected void initDefaultCommand() {
-		this.setDefaultCommand(new CommandBoom());
+		// this.setDefaultCommand(new CommandBoom());
 	}
 
 }

@@ -32,5 +32,6 @@ public abstract class CommandBase extends Command {
 		boom = new Boom();
 		wings = new Wings();
 		harpoon = new Harpoon();
+		//pneumatics = new Pneumatics();
 	}
 }

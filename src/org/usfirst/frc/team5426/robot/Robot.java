@@ -1,26 +1,28 @@
 package org.usfirst.frc.team5426.robot;
 
-import org.usfirst.frc.team5426.robot.auto.CrossLine;
-import org.usfirst.frc.team5426.robot.auto.DropLeft;
-import org.usfirst.frc.team5426.robot.auto.DropRight;
-import org.usfirst.frc.team5426.robot.auto.StraightDrop;
+import org.usfirst.frc.team5426.robot.auto.AutoSelector;
+import org.usfirst.frc.team5426.robot.commands.AutoModeSetter;
 import org.usfirst.frc.team5426.robot.commands.CommandBase;
+import org.usfirst.frc.team5426.robot.commands.CommandBoom;
 import org.usfirst.frc.team5426.robot.commands.CommandDrive;
 import org.usfirst.frc.team5426.robot.commands.CommandElevator;
+import org.usfirst.frc.team5426.robot.commands.auto.AutoDelaySetter;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import enums.AutoMode;
+import enums.Position;
 
 public class Robot extends IterativeRobot {
 	
 	public static double AUTO_DELAY = 0;
+	public static AutoMode AUTO_MODE = null;
 	
 	public static OI controls;
 	
@@ -30,11 +32,10 @@ public class Robot extends IterativeRobot {
 	
 	public static String gameData = null;
 	public static Alliance alliance = null;
+	private Position switchSide = null;
 	
-	private SendableChooser<CommandGroup> auto;
-	private Command autoCommand;
-	
-	private SendableChooser<Boolean> delay;
+	private SendableChooser<Command> auto;
+	private SendableChooser<Command> delay;
 	
 	// INITIALIZATION METHODS
 	@Override
@@ -49,48 +50,24 @@ public class Robot extends IterativeRobot {
 		
 		auto = new SendableChooser<>();
 		auto.addDefault("None", null);
-		auto.addObject("Cross Line", new CrossLine());
-		auto.addObject("Straight Drop", new StraightDrop());
-		auto.addObject("Drop Left", new DropLeft());
-		auto.addObject("Drop Right", new DropRight());
+		auto.addObject("Cross Line", new AutoModeSetter(AutoMode.CROSS_LINE));
+		auto.addObject("Straight Drop", new AutoModeSetter(AutoMode.DROP_STRAIGHT));
+		auto.addObject("Drop", new AutoModeSetter(AutoMode.DROP_SIDE));
 		SmartDashboard.putData("Autonomous Mode:", auto);
 		
 		delay = new SendableChooser<>();
-		delay.addDefault("0 seconds", setAutoDelay(0));
-		delay.addDefault("1 seconds", setAutoDelay(1));
-		delay.addDefault("2 seconds", setAutoDelay(2));
-		delay.addDefault("3 seconds", setAutoDelay(3));
-		delay.addDefault("4 seconds", setAutoDelay(4));
-		delay.addDefault("5 seconds", setAutoDelay(5));
-		delay.addDefault("6 seconds", setAutoDelay(6));
-		delay.addDefault("7 seconds", setAutoDelay(7));
-		delay.addDefault("8 seconds", setAutoDelay(8));
-		delay.addDefault("9 seconds", setAutoDelay(9));
-		delay.addDefault("10 seconds", setAutoDelay(10));
+		delay.addDefault("0 seconds", new AutoDelaySetter(0));
+		delay.addObject("1 seconds",  new AutoDelaySetter(1));
+		delay.addObject("2 seconds",  new AutoDelaySetter(2));
+		delay.addObject("3 seconds",  new AutoDelaySetter(3));
+		delay.addObject("4 seconds",  new AutoDelaySetter(4));
+		delay.addObject("5 seconds",  new AutoDelaySetter(5));
+		delay.addObject("6 seconds",  new AutoDelaySetter(6));
+		delay.addObject("7 seconds",  new AutoDelaySetter(7));
+		delay.addObject("8 seconds",  new AutoDelaySetter(8));
+		delay.addObject("9 seconds",  new AutoDelaySetter(9));
+		delay.addObject("10 seconds", new AutoDelaySetter(10));
 		SmartDashboard.putData("Autonomous Delay:", delay);
-		
-		/*if (gameData.length() > 0) {
-			
-			if (alliance == Alliance.Red) {
-				switch (gameData.charAt(0)) {
-				case 'L':
-					//autoCommand = new DropLeft();
-					break;
-				case 'R':
-					// red right
-					break;
-				}
-			}
-			
-			else if (alliance == Alliance.Blue) {
-				switch (gameData.charAt(0)) {
-				case 'L':
-					// blue left
-				case 'R':
-					// blue right
-				}
-			}
-		}*/
 	}
 	
 	@Override
@@ -98,41 +75,35 @@ public class Robot extends IterativeRobot {
 		if (gameData.length() > 0) {
 			
 			char firstChar = gameData.charAt(0);
-			if (alliance == Alliance.Red) {
-				switch (firstChar) {
+			switch (firstChar) {
 				case 'L':
-					// left side auto
+					switchSide = Position.LEFT;
 					break;
 				case 'R':
-					// right side auto
+					switchSide = Position.RIGHT;
 					break;
-				}
-			}
-			
-			else if (alliance == Alliance.Blue) {
-				switch (firstChar) {
-				case 'L':
-					// left side auto
-					break;
-				case 'R':
-					// right side auto
-					break;
-				}
 			}
 		}
+		
+		new AutoSelector(switchSide, AUTO_MODE).getCommand().start();
 	}
 	
 	@Override
 	public void teleopInit() {
+		// We don't want these periodic default commands to fire
+		// during autonomous or they bog down the RIO. We only want
+		// them to constantly fire in teleop;
 		
-		CommandBase.elevator.setDefaultCommand(new CommandElevator());
 		CommandBase.driveTrain.setDefaultCommand(new CommandDrive());
+		CommandBase.elevator.setDefaultCommand(new CommandElevator());
+		CommandBase.boom.setDefaultCommand(new CommandBoom());
 	}
 	
 	@Override
 	public void disabledInit() {
 		
 	}
+	
 	
 	// PERIODIC METHODS
 	@Override
@@ -154,8 +125,23 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void disabledPeriodic() {
+		// Scheduler.getInstance().run();
+		
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 	}
+	
+	@Override
+	public void testPeriodic() {
+		Scheduler.getInstance().run();
+		
+		//if (!CommandBase.pneumatics.running()) CommandBase.pneumatics.start();
+	}
+	
+	
+	
+	
+	
+	
 	
 	// LOGGING METHODS
 	public static void log(String message) {
@@ -173,10 +159,12 @@ public class Robot extends IterativeRobot {
 		DriverStation.reportWarning("[ERROR] " + message, false);
 	}
 	
-	public boolean setAutoDelay(double delay) {
-		this.AUTO_DELAY = delay;
-		
-		return true;
+	public static void setAutoDelay(double delay) {
+		Robot.AUTO_DELAY = delay;
+	}
+	
+	public static void setAutoMode(AutoMode mode) {
+		Robot.AUTO_MODE = mode;
 	}
 	
 	
