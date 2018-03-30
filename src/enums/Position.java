@@ -1,5 +1,5 @@
 package enums;
 
 public enum Position {
-	TOP, BOTTOM, LEFT, RIGHT;
+	TOP, BOTTOM, LEFT, RIGHT, MIDDLE;
 }

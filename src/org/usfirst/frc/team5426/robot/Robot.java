@@ -1,23 +1,17 @@
 package org.usfirst.frc.team5426.robot;
 
 import org.usfirst.frc.team5426.robot.auto.AutoSelector;
-import org.usfirst.frc.team5426.robot.commands.AutoModeSetter;
 import org.usfirst.frc.team5426.robot.commands.CommandBase;
 import org.usfirst.frc.team5426.robot.commands.CommandBoom;
-import org.usfirst.frc.team5426.robot.commands.CommandCompress;
 import org.usfirst.frc.team5426.robot.commands.CommandDrive;
 import org.usfirst.frc.team5426.robot.commands.CommandElevator;
-import org.usfirst.frc.team5426.robot.commands.auto.AutoDelaySetter;
-import org.usfirst.frc.team5426.robot.subsystems.Pneumatics;
 
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.hal.CompressorJNI;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import enums.AutoMode;
@@ -34,12 +28,11 @@ public class Robot extends IterativeRobot {
 	
 	public static Preferences settings;
 	
-	public static String gameData = null;
-	public static Alliance alliance = null;
-	private Position switchSide = null;
+	public static String GAME_DATA = null;
 	
-	private SendableChooser<Command> auto;
-	private SendableChooser<Command> delay;
+	private SendableChooser<AutoMode> auto;
+	private SendableChooser<Integer> delay;
+	private SendableChooser<Position> start;
 	
 	// INITIALIZATION METHODS
 	@Override
@@ -52,70 +45,56 @@ public class Robot extends IterativeRobot {
 		controls.registerControls();
 		
 		auto = new SendableChooser<>();
-		auto.addDefault("None", new AutoModeSetter(AutoMode.NONE));
-		auto.addObject("Cross Line", new AutoModeSetter(AutoMode.CROSS_LINE));
-		auto.addObject("Straight Drop", new AutoModeSetter(AutoMode.DROP_STRAIGHT));
-		auto.addObject("Drop", new AutoModeSetter(AutoMode.DROP_SIDE));
+		auto.addDefault("None", AutoMode.NONE);
+		auto.addObject("Cross Line", AutoMode.CROSS_LINE);
+		auto.addObject("Straight Drop", AutoMode.DROP_STRAIGHT);
+		auto.addObject("Drop", AutoMode.DROP_SIDE);
 		SmartDashboard.putData("Autonomous Mode:", auto);
 		
 		delay = new SendableChooser<>();
-		delay.addDefault("0 seconds", new AutoDelaySetter(0));
-		delay.addObject("1 seconds",  new AutoDelaySetter(1));
-		delay.addObject("2 seconds",  new AutoDelaySetter(2));
-		delay.addObject("3 seconds",  new AutoDelaySetter(3));
-		delay.addObject("4 seconds",  new AutoDelaySetter(4));
-		delay.addObject("5 seconds",  new AutoDelaySetter(5));
-		delay.addObject("6 seconds",  new AutoDelaySetter(6));
-		delay.addObject("7 seconds",  new AutoDelaySetter(7));
-		delay.addObject("8 seconds",  new AutoDelaySetter(8));
-		delay.addObject("9 seconds",  new AutoDelaySetter(9));
-		delay.addObject("10 seconds", new AutoDelaySetter(10));
+		delay.addDefault("0 seconds", 0);
+		delay.addObject("1 seconds",  1);
+		delay.addObject("2 seconds",  2);
+		delay.addObject("3 seconds",  3);
+		delay.addObject("4 seconds",  4);
+		delay.addObject("5 seconds",  5);
+		delay.addObject("6 seconds",  6);
+		delay.addObject("7 seconds",  7);
+		delay.addObject("8 seconds",  8);
+		delay.addObject("9 seconds",  9);
+		delay.addObject("10 seconds", 10);
 		SmartDashboard.putData("Autonomous Delay:", delay);
+		
+		start = new SendableChooser<>();
+		start.addDefault("Middle", Position.MIDDLE);
+		start.addObject("Left", Position.LEFT);
+		start.addObject("Right", Position.RIGHT);
+		SmartDashboard.putData("Start Position:", start);
 	}
 	
 	@Override
 	public void autonomousInit() {
 		CommandBase.pneumatics.stop();
 		
-		/*while (AUTO_MODE == null) {
-			System.out.println("Robot.java AUTO_MODE still null");
+		if (GAME_DATA.length() > 0) {
+			System.out.println("(Robot.java) NOTIFICATION: GAME DATA IS > 0");
 			
-			auto.getSelected().start();
-			delay.getSelected().start();
-		}
-		
-		System.out.println("AUTO_MODE: " + AUTO_MODE);
-		
-		if (gameData.length() > 0) {
-			
-			System.out.println("> 0 true");
-			
-			char firstChar = gameData.charAt(0);
-			switch (firstChar) {
-				case 'L':
-					switchSide = Position.LEFT;
-					break;
-				case 'R':
-					switchSide = Position.RIGHT;
-					break;
-			}
+			Command autoCommand = new AutoSelector(GAME_DATA, auto.getSelected(), start.getSelected()).getCommand();
+			autoCommand.start();
 		}
 		
 		else {
-			System.out.println("> 0 false");
+			System.out.println("(Robot.java) FATAL: COULD NOT RETRIEVE GAME DATA");
 		}
-		
-		Command autoCmd = new AutoSelector(switchSide, AUTO_MODE).getCommand();
-		System.out.println("FINAL AUTO COMMAND: " + autoCmd);*/
 	}
 	
 	@Override
 	public void teleopInit() {
 		CommandBase.pneumatics.stop();
 		
-		// We don't want these periodic default commands to fire
-		// during autonomous or they bog down the RIO. We only want
-		// them to constantly fire in teleop;
+		// We don't want these default commands to fire
+		// during autonomous or they bog down the RIO. 
+		// We only want them to fire repeatedly in teleop;
 		
 		CommandBase.driveTrain.setDefaultCommand(new CommandDrive());
 		CommandBase.elevator.setDefaultCommand(new CommandElevator());
@@ -136,21 +115,17 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void teleopPeriodic() {
-		
 		Scheduler.getInstance().run();
 	}
 	
 	@Override
 	public void autonomousPeriodic() {
-		
 		Scheduler.getInstance().run();
 	}
 	
 	@Override
 	public void disabledPeriodic() {
-		// Scheduler.getInstance().run();
-		
-		gameData = DriverStation.getInstance().getGameSpecificMessage();
+		GAME_DATA = DriverStation.getInstance().getGameSpecificMessage();
 	}
 	
 	@Override
@@ -166,27 +141,15 @@ public class Robot extends IterativeRobot {
 	
 	// LOGGING METHODS
 	public static void log(String message) {
-		
 		DriverStation.reportWarning("[EVENT] " + message, false);
 	}
 	
 	public static void warn(String message) {
-		
 		DriverStation.reportWarning("[WARNING] " + message, false);
 	}
 	
 	public static void error(String message) {
-		
 		DriverStation.reportWarning("[ERROR] " + message, false);
-	}
-	
-	public static void setAutoDelay(double delay) {
-		Robot.AUTO_DELAY = delay;
-	}
-	
-	public static void setAutoMode(AutoMode mode) {
-		System.out.println("setAutoMode() " + mode);
-		Robot.AUTO_MODE = mode;
 	}
 	
 	

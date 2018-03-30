@@ -8,10 +8,11 @@ import org.usfirst.frc.team5426.robot.commands.auto.AutonomousPause;
 import org.usfirst.frc.team5426.robot.commands.auto.AutonomousRaiseElevator;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import enums.Position;
 
 public class DropLeft extends CommandGroup {
 	
-	public DropLeft() {
+	public DropLeft(Position start) {
 		this.addSequential(new AutonomousPause(Robot.AUTO_DELAY));
 		
 		this.addSequential(new AutonomousGrab());
