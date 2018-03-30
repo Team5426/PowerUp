@@ -2,16 +2,16 @@ package org.usfirst.frc.team5426.robot.commands;
 
 public class CommandCompress extends CommandBase {
 	
-	/*public CommandCompress() {
+	public CommandCompress() {
 		requires(pneumatics);
 	}
 	
 	protected void initialize() {
-		pneumatics.compress();
+		pneumatics.start();
 	}
 	
 	protected void execute() {
-		System.out.println("Compressor should be running: " + pneumatics.getSwitchStatus());
+		
 	}
 	
 	protected void end() {
@@ -20,9 +20,12 @@ public class CommandCompress extends CommandBase {
 	
 	protected void interrupted() {
 		
-	}*/
+	}
 	
 	protected boolean isFinished() {
-		return true;//pneumatics.getSwitchStatus();
+		if (this.isCanceled()) return true;
+		
+		System.out.println(pneumatics.getSwitchStatus());
+		return pneumatics.getSwitchStatus();
 	}
 }

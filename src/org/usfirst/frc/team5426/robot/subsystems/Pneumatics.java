@@ -8,24 +8,16 @@ public class Pneumatics extends Subsystem {
 	private Compressor compressor;
 	
 	public Pneumatics() {
-		compressor = new Compressor();
+		compressor = new Compressor(0);
 		compressor.setClosedLoopControl(false);
 	}
 	
-	public void compress() {
+	public void start() {
 		compressor.start();
 	}
 	
 	public void stop() {
 		compressor.stop();
-	}
-	
-	public boolean running() {
-		return compressor.enabled();
-	}
-	
-	public double getCurrent() {
-		return compressor.getCompressorCurrent();
 	}
 	
 	public boolean getSwitchStatus() {

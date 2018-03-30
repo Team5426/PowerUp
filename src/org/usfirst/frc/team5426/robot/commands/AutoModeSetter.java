@@ -13,6 +13,7 @@ public class AutoModeSetter extends CommandBase {
 	}
 	
 	protected void initialize() {
+		System.out.println("Setting auto mode to: " + autoMode.toString());
 		Robot.setAutoMode(autoMode);
 	}
 

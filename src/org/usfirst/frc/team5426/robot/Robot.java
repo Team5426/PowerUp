@@ -4,16 +4,20 @@ import org.usfirst.frc.team5426.robot.auto.AutoSelector;
 import org.usfirst.frc.team5426.robot.commands.AutoModeSetter;
 import org.usfirst.frc.team5426.robot.commands.CommandBase;
 import org.usfirst.frc.team5426.robot.commands.CommandBoom;
+import org.usfirst.frc.team5426.robot.commands.CommandCompress;
 import org.usfirst.frc.team5426.robot.commands.CommandDrive;
 import org.usfirst.frc.team5426.robot.commands.CommandElevator;
 import org.usfirst.frc.team5426.robot.commands.auto.AutoDelaySetter;
+import org.usfirst.frc.team5426.robot.subsystems.Pneumatics;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.hal.CompressorJNI;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import enums.AutoMode;
@@ -40,7 +44,6 @@ public class Robot extends IterativeRobot {
 	// INITIALIZATION METHODS
 	@Override
 	public void robotInit() {
-		System.out.println("robotInit()");
 		settings = Preferences.getInstance();
 		
 		CommandBase.init();
@@ -49,7 +52,7 @@ public class Robot extends IterativeRobot {
 		controls.registerControls();
 		
 		auto = new SendableChooser<>();
-		auto.addDefault("None", null);
+		auto.addDefault("None", new AutoModeSetter(AutoMode.NONE));
 		auto.addObject("Cross Line", new AutoModeSetter(AutoMode.CROSS_LINE));
 		auto.addObject("Straight Drop", new AutoModeSetter(AutoMode.DROP_STRAIGHT));
 		auto.addObject("Drop", new AutoModeSetter(AutoMode.DROP_SIDE));
@@ -72,7 +75,20 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void autonomousInit() {
+		CommandBase.pneumatics.stop();
+		
+		/*while (AUTO_MODE == null) {
+			System.out.println("Robot.java AUTO_MODE still null");
+			
+			auto.getSelected().start();
+			delay.getSelected().start();
+		}
+		
+		System.out.println("AUTO_MODE: " + AUTO_MODE);
+		
 		if (gameData.length() > 0) {
+			
+			System.out.println("> 0 true");
 			
 			char firstChar = gameData.charAt(0);
 			switch (firstChar) {
@@ -85,11 +101,18 @@ public class Robot extends IterativeRobot {
 			}
 		}
 		
-		new AutoSelector(switchSide, AUTO_MODE).getCommand().start();
+		else {
+			System.out.println("> 0 false");
+		}
+		
+		Command autoCmd = new AutoSelector(switchSide, AUTO_MODE).getCommand();
+		System.out.println("FINAL AUTO COMMAND: " + autoCmd);*/
 	}
 	
 	@Override
 	public void teleopInit() {
+		CommandBase.pneumatics.stop();
+		
 		// We don't want these periodic default commands to fire
 		// during autonomous or they bog down the RIO. We only want
 		// them to constantly fire in teleop;
@@ -101,7 +124,7 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void disabledInit() {
-		
+		CommandBase.pneumatics.stop();
 	}
 	
 	
@@ -132,9 +155,7 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void testPeriodic() {
-		Scheduler.getInstance().run();
-		
-		//if (!CommandBase.pneumatics.running()) CommandBase.pneumatics.start();
+		CommandBase.pneumatics.start();
 	}
 	
 	
@@ -164,6 +185,7 @@ public class Robot extends IterativeRobot {
 	}
 	
 	public static void setAutoMode(AutoMode mode) {
+		System.out.println("setAutoMode() " + mode);
 		Robot.AUTO_MODE = mode;
 	}
 	

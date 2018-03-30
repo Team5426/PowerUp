@@ -12,19 +12,22 @@ public class AutoSelector {
 	public AutoSelector(Position switchSide, AutoMode selectedMode) {
 		this.switchSide = switchSide;
 		this.selectedMode = selectedMode;
+		
+		System.out.println("Selected mode: " + selectedMode);
+		System.out.println("Switch side: " + switchSide.toString());
 	}
 	
 	public Command getCommand() {
-		if (selectedMode == AutoMode.NONE) return null;
+		if (selectedMode == AutoMode.NONE) return new None();
 		if (selectedMode == AutoMode.DROP_STRAIGHT) return new StraightDrop();
 		
-		if (switchSide == Position.LEFT) {
+		if (switchSide.toString() == Position.LEFT.toString()) {
 			if (selectedMode == AutoMode.DROP_SIDE) {
 				return new DropLeft();
 			}
 		}
 		
-		else if (switchSide == Position.RIGHT) {
+		else if (switchSide.toString() == Position.RIGHT.toString()) {
 			if (selectedMode == AutoMode.DROP_SIDE) {
 				return new DropRight();
 			}

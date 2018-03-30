@@ -5,6 +5,7 @@ import org.usfirst.frc.team5426.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team5426.robot.subsystems.Elevator;
 import org.usfirst.frc.team5426.robot.subsystems.Grabber;
 import org.usfirst.frc.team5426.robot.subsystems.Harpoon;
+import org.usfirst.frc.team5426.robot.subsystems.Pneumatics;
 import org.usfirst.frc.team5426.robot.subsystems.Winch;
 import org.usfirst.frc.team5426.robot.subsystems.Wings;
 
@@ -20,11 +21,12 @@ public abstract class CommandBase extends Command {
 	public static Boom boom;
 	public static Wings wings;
 	public static Harpoon harpoon;
-	//public static Pneumatics pneumatics;
+	public static Pneumatics pneumatics;
 	
 	public static MecanumDrive drive;
 	
 	public static void init() {
+		pneumatics = new Pneumatics();
 		driveTrain = new DriveTrain();
 		grabber = new Grabber();
 		elevator = new Elevator();
@@ -32,6 +34,5 @@ public abstract class CommandBase extends Command {
 		boom = new Boom();
 		wings = new Wings();
 		harpoon = new Harpoon();
-		//pneumatics = new Pneumatics();
 	}
 }
