@@ -1,13 +1,14 @@
 package org.usfirst.frc.team5426.robot;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.usfirst.frc.team5426.robot.auto.AutoSelector;
 import org.usfirst.frc.team5426.robot.commands.CommandBase;
 import org.usfirst.frc.team5426.robot.commands.CommandBoom;
-import org.usfirst.frc.team5426.robot.commands.CommandDrive;
 import org.usfirst.frc.team5426.robot.commands.CommandElevator;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.Command;
@@ -16,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import enums.AutoMode;
 import enums.Position;
+import utils.Routine;
 
 public class Robot extends IterativeRobot {
 	
@@ -33,6 +35,8 @@ public class Robot extends IterativeRobot {
 	private SendableChooser<AutoMode> auto;
 	private SendableChooser<Integer> delay;
 	private SendableChooser<Position> start;
+	private SendableChooser<Routine> routines;
+	private SendableChooser<Boolean> autoType;
 	
 	// INITIALIZATION METHODS
 	@Override
@@ -48,7 +52,8 @@ public class Robot extends IterativeRobot {
 		auto.addDefault("None", AutoMode.NONE);
 		auto.addObject("Cross Line", AutoMode.CROSS_LINE);
 		auto.addObject("Straight Drop", AutoMode.DROP_STRAIGHT);
-		auto.addObject("Drop", AutoMode.DROP_SIDE);
+		auto.addObject("Side Drop", AutoMode.DROP_SIDE);
+		auto.addObject("Middle Drop", AutoMode.MIDDLE_DROP);
 		SmartDashboard.putData("Autonomous Mode:", auto);
 		
 		delay = new SendableChooser<>();
@@ -70,21 +75,61 @@ public class Robot extends IterativeRobot {
 		start.addObject("Left", Position.LEFT);
 		start.addObject("Right", Position.RIGHT);
 		SmartDashboard.putData("Start Position:", start);
+		
+		autoType = new SendableChooser<>();
+		autoType.addDefault("Auto Selector", true);
+		autoType.addObject("Manual Routine", false);
+		SmartDashboard.putData("Auto Mode Type", autoType);
+		
+		routines = new SendableChooser<>();
+		routines.addDefault("None", null);
+		for (File routine : Routine.getRoutineFiles()) {
+			String name = routine.getName().replace(".auto", "");
+			routines.addObject(name, new Routine(name));
+		}
+		SmartDashboard.putData("Routines", routines);
 	}
 	
 	@Override
 	public void autonomousInit() {
 		CommandBase.pneumatics.stop();
+		Robot.AUTO_DELAY = delay.getSelected();
 		
-		if (GAME_DATA.length() > 0) {
-			System.out.println("(Robot.java) NOTIFICATION: GAME DATA IS > 0");
+		System.out.println("Autonomous Init");
+		
+		if (autoType.getSelected()) {
 			
-			Command autoCommand = new AutoSelector(GAME_DATA, auto.getSelected(), start.getSelected()).getCommand();
-			autoCommand.start();
+			System.out.println("Auto Selector is being used");
+			
+			if (GAME_DATA.length() == 3) {
+				System.out.println("(Robot.java) NOTIFICATION: GAME DATA IS > 0");
+				
+				Routine autoRoutine = new AutoSelector(GAME_DATA, auto.getSelected(), start.getSelected()).getRoutine();
+				
+				System.out.println("(Robot.java) INFO: autoCommand is " + autoRoutine.getName());
+				
+				try {
+					autoRoutine.play();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			else {
+				System.out.println("(Robot.java) FATAL: COULD NOT RETRIEVE GAME DATA");
+			}
 		}
 		
 		else {
-			System.out.println("(Robot.java) FATAL: COULD NOT RETRIEVE GAME DATA");
+			Routine routine = routines.getSelected();
+			
+			if (routine != null) {
+				try {
+					routine.play();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 	
@@ -92,11 +137,19 @@ public class Robot extends IterativeRobot {
 	public void teleopInit() {
 		CommandBase.pneumatics.stop();
 		
+		routines = new SendableChooser<>();
+		routines.addDefault("None", null);
+		for (File routine : Routine.getRoutineFiles()) {
+			System.out.println(routine.getName());
+			String name = routine.getName().replace(".auto", "");
+			routines.addObject(name, new Routine(name));
+		}
+		SmartDashboard.putData("Routines", routines);
+		
 		// We don't want these default commands to fire
 		// during autonomous or they bog down the RIO. 
 		// We only want them to fire repeatedly in teleop;
 		
-		CommandBase.driveTrain.setDefaultCommand(new CommandDrive());
 		CommandBase.elevator.setDefaultCommand(new CommandElevator());
 		CommandBase.boom.setDefaultCommand(new CommandBoom());
 	}
@@ -132,10 +185,6 @@ public class Robot extends IterativeRobot {
 	public void testPeriodic() {
 		CommandBase.pneumatics.start();
 	}
-	
-	
-	
-	
 	
 	
 	

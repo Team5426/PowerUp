@@ -13,6 +13,7 @@ import enums.Position;
 public class DropLeft extends CommandGroup {
 	
 	public DropLeft(Position start) {
+		
 		this.addSequential(new AutonomousPause(Robot.AUTO_DELAY));
 		
 		this.addSequential(new AutonomousGrab());

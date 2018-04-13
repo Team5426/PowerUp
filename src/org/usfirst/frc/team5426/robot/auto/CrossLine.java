@@ -11,20 +11,12 @@ public class CrossLine extends CommandGroup {
 	
 	public CrossLine(Position start) {
 		
+		System.out.println("(CrossLine.java) INFO: start is " + start);
+		
 		this.addSequential(new AutonomousPause(Robot.AUTO_DELAY));
 		
-		if (start.equals(Position.MIDDLE)) {
-			// turn 90 degrees, move forward then
-			// turn -90 degrees then move forward more
-		}
-		
-		else if (start.equals(Position.LEFT)) {
-			this.addSequential(new AutonomousDrive(0.5, 0.0, 3));
-		}
-		
-		else if (start.equals(Position.RIGHT)) {
-			this.addSequential(new AutonomousDrive(0.5, 0.0, 3));
-		}
+		this.addSequential(new AutonomousDrive(1.0, 0.0, 1.0));
+		this.addSequential(new AutonomousDrive(-1.0, 0.0, 0.25));
 		
 		//this.addSequential(new AutonomousRotateToAngle(90));
 		

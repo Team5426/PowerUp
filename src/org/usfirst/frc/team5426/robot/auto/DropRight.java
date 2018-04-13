@@ -15,17 +15,20 @@ public class DropRight extends CommandGroup {
 	public DropRight(Position start) {
 		this.addSequential(new AutonomousPause(Robot.AUTO_DELAY));
 		
-		this.addSequential(new AutonomousGrab());
-		this.addSequential(new AutonomousRaiseElevator(1.0, 0.8));
-		this.addSequential(new AutonomousDrive(0.7, 0.0, 1.2));
-		this.addSequential(new AutonomousPause(2));
-		//this.addSequential(new AutonomousDrive(-1.0, 0.0, 0.3));
-		this.addSequential(new AutonomousPause(2));
-		this.addSequential(new AutonomousDrive(0.0, -1.0, 0.4));
+		this.addSequential(new AutonomousDrive(1.0, 0.0, 1.0));
 		this.addSequential(new AutonomousDrive(-1.0, 0.0, 0.25));
-		this.addSequential(new AutonomousPause(0.5));
-		this.addSequential(new AutonomousDrive(0.5, 0.0, 0.5));
-		this.addSequential(new AutonomousPause(1));
-		this.addSequential(new AutonomousDrop());
+		
+//		this.addSequential(new AutonomousGrab());
+//		this.addSequential(new AutonomousRaiseElevator(1.0, 0.8));
+//		this.addSequential(new AutonomousDrive(0.7, 0.0, 1.2));
+//		this.addSequential(new AutonomousPause(2));
+//		//this.addSequential(new AutonomousDrive(-1.0, 0.0, 0.3));
+//		this.addSequential(new AutonomousPause(2));
+//		this.addSequential(new AutonomousDrive(0.0, -1.0, 0.4));
+//		this.addSequential(new AutonomousDrive(-1.0, 0.0, 0.25));
+//		this.addSequential(new AutonomousPause(0.5));
+//		this.addSequential(new AutonomousDrive(0.5, 0.0, 0.5));
+//		this.addSequential(new AutonomousPause(1));
+//		this.addSequential(new AutonomousDrop());
 	}
 }
