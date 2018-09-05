@@ -15,7 +15,10 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 
 public abstract class CommandBase extends Command {
-	
+	// All other commands will extend CommandBase so that they have access to
+	// all required subsystems.
+
+	// Creates variables for each subsystem
 	public static DriveTrain driveTrain;
 	public static Winch winch;
 	public static Grabber grabber;
@@ -24,10 +27,11 @@ public abstract class CommandBase extends Command {
 	public static Wings wings;
 	public static Harpoon harpoon;
 	public static Pneumatics pneumatics;
-	
+
 	public static MecanumDrive drive;
-	
+
 	public static void init() {
+		// Assigns values to each of the variables
 		pneumatics = new Pneumatics();
 		driveTrain = new DriveTrain();
 		grabber = new Grabber();

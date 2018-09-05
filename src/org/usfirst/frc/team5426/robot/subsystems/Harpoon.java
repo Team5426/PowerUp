@@ -4,25 +4,26 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Harpoon extends Subsystem {
-	
+
 	public Solenoid solenoid;
-	
+
 	public Harpoon() {
+		// Defines the solenoid
 		solenoid = new Solenoid(3);
-		
-		//solenoid.set(false);
 	}
-	
+
 	public void shoot() {
+		// Activate the solenoid
 		solenoid.set(true);
 	}
-	
+
 	public void reload() {
+		// Release the solenoid
 		solenoid.set(false);
 	}
-	
+
 	@Override
 	protected void initDefaultCommand() {
-		
+
 	}
 }
